@@ -1,0 +1,38 @@
+version: '3'
+services:
+  app:
+    container_name: blog_sys
+    build:
+      context: .
+      dockerfile: ./docker/app/Dockerfile
+    working_dir: /var/www/html
+    volumes:
+      - "./src/:/var/www/html"
+  web:
+    container_name: blog_nginx
+    build:
+      context: .
+      dockerfile: ./docker/nginx/Dockerfile
+    ports:
+      - 5000:5000
+    working_dir: /var/www/html
+    volumes:
+      - "./src/:/var/www/html"
+      - "./docker/nginx/conf:/etc/nginx/conf.d"
+    depends_on:
+      - app
+  dynamodb-local:
+    image: amazon/dynamodb-local
+    ports:
+      - "8000:8000"
+    volumes:
+      - "./data:/data"
+    command: ["-jar", "DynamoDBLocal.jar", "-sharedDb", "-dbPath", "/data"]
+  dynamodb-admin:
+    image: aaronshaf/dynamodb-admin
+    ports:
+      - "8001:8001"
+    environment:
+      - DYNAMO_ENDPOINT=http://dynamodb-local:8000
+volumes:
+  storage:
