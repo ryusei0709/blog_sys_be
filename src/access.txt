@@ -1,0 +1,6 @@
+・admin_userの一覧を取得する
+・admin_userの一つのデータを取得する
+・投稿の一覧を取得する
+・admin_userに紐付いた投稿を取得する
+・admin_userに紐付いた一つの投稿を取得する
+・投稿に紐付いたcommentを取得する
